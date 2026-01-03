@@ -213,9 +213,9 @@ MIT License — Feel free to use for research/education
 
 ## 👤 Author
 
-**Your Name** | AI/ML Research  
-📧 [your.email@example.com](mailto:your.email@example.com)  
-🔗 [LinkedIn](https://linkedin.com/in/yourprofile) | [GitHub](https://github.com/yourusername)
+Uthman Babatune | Applie AI/ML ngineer  
+📧 [your.email@example.com](mailto:buthman@gmail.com)  
+🔗 [LinkedIn](https://linkedin.com/in/uthman-babatunde-m-d-126582286) | [GitHub](https://github.com/uthy4r)
 
 ## 📖 References
 
