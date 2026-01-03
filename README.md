@@ -214,7 +214,7 @@ MIT License — Feel free to use for research/education
 ## 👤 Author
 
 Uthman Babatune | Applie AI/ML ngineer  
-📧 [your.email@example.com](mailto:buthman@gmail.com)  
+📧 [mail contact](mailto:buthman@gmail.com)  
 🔗 [LinkedIn](https://linkedin.com/in/uthman-babatunde-m-d-126582286) | [GitHub](https://github.com/uthy4r)
 
 ## 📖 References
