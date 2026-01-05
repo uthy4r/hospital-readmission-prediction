@@ -28,7 +28,7 @@ discharge data from 130 US hospitals. This model was developed using SMOTE to ha
 @st.cache_resource
 def load_model():
     model_path = "models/hospital_readmission_model.pkl"
-    url = "https://huggingface.co/Uthy4r/hospital-readmission-model/resolve/main/hospital_readmission_model.pkl"
+    url = "https://huggingface.co/Uthy4r/hospital_readmission_model/resolve/main/rf_readmission_smote.pkl"
     
     # Check if file exists and delete if corrupted (too small)
     if os.path.exists(model_path):
