@@ -27,15 +27,7 @@ A machine learning model that predicts 30-day hospital readmission risk using pa
 ## 📁 Repository Structure
 
 ```
-hospital-readmission/
-├── notebooks/
-│   └── Readmission_model.ipynb          # Full ML pipeline & analysis
-├── models/
-│   └── rf_readmission_smote.pkl         # Trained Random Forest (see note below)
-├── app.py                               # Streamlit web interface
-├── requirements.txt                     # Python dependencies
-├── .gitignore                          # Git ignore rules
-└── README.md                           # This file
+hospital-readmission/ ├── notebooks/ │ └── Readmission_model.ipynb # Full ML pipeline & analysis ├── models/ │ └── README.md # Model documentation (artifact hosted on Hugging Face) ├── app.py # Streamlit web interface ├── requirements.txt # Python dependencies ├── MODEL_CARD.md # Detailed model documentation & ethics ├── .gitignore # Git ignore rules └── README.md # This file
 ```
 
 ## 🚀 Quick Start
