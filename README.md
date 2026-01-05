@@ -27,7 +27,15 @@ A machine learning model that predicts 30-day hospital readmission risk using pa
 ## 📁 Repository Structure
 
 ```
-hospital-readmission/ ├── notebooks/ │ └── Readmission_model.ipynb # Full ML pipeline & analysis ├── models/ │ └── README.md # Model documentation (artifact hosted on Hugging Face) ├── app.py # Streamlit web interface ├── requirements.txt # Python dependencies ├── MODEL_CARD.md # Detailed model documentation & ethics ├── .gitignore # Git ignore rules └── README.md # This file
+hospital-readmission/
+├── notebooks/
+│   └── Readmission_model.ipynb          # Full ML pipeline & analysis
+├── models/
+│   └── README.md                        # Model documentation (artifact hosted on Hugging Face)
+├── app.py                               # Streamlit web interface
+├── requirements.txt                     # Python dependencies
+├── .gitignore                          # Git ignore rules
+└── README.md                           # This file
 ```
 
 ## 🚀 Quick Start
@@ -36,8 +44,8 @@ hospital-readmission/ ├── notebooks/ │ └── Readmission_model.ipynb
 
 ```bash
 # Clone repository
-git clone https://github.com/yourusername/hospital-readmission.git
-cd hospital-readmission
+git clone [https://github.com/uthy4r/Readmission-model.git](https://github.com/uthy4r/Readmission-model.git)
+cd Readmission-model
 
 # Create virtual environment
 python3 -m venv venv
@@ -50,7 +58,7 @@ pip install -r requirements.txt
 streamlit run app.py
 ```
 
-The app opens at `http://localhost:8501`
+The app opens at `http://localhost:8501`. Note: The app will automatically download the model from Hugging Face on the first run.
 
 ### Run Notebook (Training)
 
@@ -68,11 +76,13 @@ This executes the full pipeline:
 
 ## 📦 Model File (Important)
 
-This repository does not include the trained model file (`rf_readmission_smote.pkl`) because it is large (~240MB).
+This repository uses a Hybrid Architecture to handle the large model file (~240MB) without bloating the Git repository.
 
-### To run the app locally:
-1. Ensure the trained model is placed at: `models/rf_readmission_smote.pkl`
-2. Run: `streamlit run app.py`
+### How it works:
+1. Frontend: Streamlit Cloud handles the UI.
+2. Model Registry: Hugging Face Hub hosts the trained `.pkl` artifact.
+3. Dynamic Loading: When the app starts, it fetches the model securely from: https:
+   `//huggingface.co/Uthy4r/hospital_readmission_model/resolve/main/rf_readmission_smote.pkl`
 
 ### To generate the model yourself:
 
@@ -88,8 +98,6 @@ jupyter notebook notebooks/Readmission_model.ipynb
 # - Wait for completion (15-20 minutes)
 # - The file rf_readmission_smote.pkl will be created
 
-# Move the model to the correct folder
-move rf_readmission_smote.pkl models/
 ```
 
 ## 📝 Model Details
@@ -116,6 +124,14 @@ move rf_readmission_smote.pkl models/
 - **Before SMOTE**: 90% non-readmitted, 10% readmitted
 - **After SMOTE**: 50/50 balanced
 
+### Clinical Logic & Thresholds
+
+| Risk Level | Threshold | Clinical Interpretation | Recommended Action |
+| :--- | :--- | :--- | :--- |
+| **High Risk** | `> 30%` | >3x the baseline risk | **Intensive intervention** |
+| **Moderate Risk** | `15 - 30%` | Elevated risk | Standard follow-up |
+| **Low Risk** | `< 15%` | Risk is at or below baseline | *(Routine Care)* |
+
 ## 🎯 Model Evaluation
 
 View detailed metrics in the notebook:
@@ -126,34 +142,15 @@ View detailed metrics in the notebook:
 
 ## 🌐 Deployment
 
-### Option 1: Streamlit Community Cloud (Free, No Code)
+### Live Demo
+**Streamlit Community Cloud:** [Click to Launch App]([https://hospital-readmission-prediction-hjdowydudqu2dvcyov9dvh.streamlit.app/])
 
-1. Push code to GitHub
-2. Go to [share.streamlit.io](https://share.streamlit.io)
-3. Connect your GitHub repo → **Deploy**
-4. Share public URL
+### Deployment Architecture
+This app is deployed using:
 
-### Option 2: Heroku / Railway / Render
+* **Streamlit Cloud:** For the Python web interface.
+* **Hugging Face:** For large model object storage.
 
-```bash
-# Add Procfile (Heroku)
-echo "web: streamlit run app.py --server.port \$PORT" > Procfile
-
-# Deploy
-git push heroku main
-```
-
-### Option 3: Docker (Production)
-
-```dockerfile
-FROM python:3.11-slim
-WORKDIR /app
-COPY requirements.txt .
-RUN pip install -r requirements.txt
-COPY . .
-EXPOSE 8501
-CMD ["streamlit", "run", "app.py"]
-```
 
 ## 📚 Data Source
 
@@ -178,6 +175,7 @@ See `requirements.txt`:
 - `pandas` — Data manipulation
 - `imbalanced-learn` — SMOTE balancing
 - `ucimlrepo` — Dataset fetching
+- - `requests` — Model downloading
 
 ## 🛠️ Troubleshooting
 
@@ -213,8 +211,8 @@ MIT License — Feel free to use for research/education
 ## 👤 Author
 
 **Your Name** | AI/ML Research  
-📧 [your.email@example.com](mailto:your.email@example.com)  
-🔗 [LinkedIn](https://linkedin.com/in/yourprofile) | [GitHub](https://github.com/yourusername)
+📧 [your.email@example.com](mailto:buthman98@gmail.com)  
+🔗 [LinkedIn](https://linkedin.com/in/uthman-babatunde-m-d-126582286) | [GitHub](https://github.com/uthy4r)
 
 ## 📖 References
 
