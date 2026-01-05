@@ -1,5 +1,8 @@
 # 🏥 Hospital Readmission Risk Prediction
 
+[![Streamlit App](https://static.streamlit.io/badges/streamlit_badge_black_white.svg)](https://hospital-readmission-prediction-hjdowydudqu2dvcyov9dvh.streamlit.app/)
+[![Model](https://img.shields.io/badge/Model-Hugging%20Face-yellow)](https://huggingface.co/Uthy4r/hospital_readmission_model/resolve/main/rf_readmission_smote.pkl)
+
 A machine learning model that predicts 30-day hospital readmission risk using patient discharge data from 130 US hospitals. This project combines Random Forest classification with SMOTE balancing to handle class imbalance in healthcare data.
 
 ## 📊 Project Overview
@@ -9,13 +12,17 @@ A machine learning model that predicts 30-day hospital readmission risk using pa
 **Solution**: A predictive model that estimates readmission probability based on:
 - Time in hospital
 - Number of medications & lab procedures
-- Patient diagnoses & outpatient visit history
+- History of inpatient/outpatient/emergency visits
 - Age and other demographic factors
 
 **Results**:
 - **Balanced Accuracy**: 72% (after SMOTE)
 - **Precision (High-Risk)**: 89%
-- **Recall**: 27% (conservative: avoids over-flagging)
+- **Recall**: Optimized to avoid missing critical cases (false negatives)
+
+## 📸 Interface
+
+![App Dashboard](dashboard.png)
 
 ## 📁 Repository Structure
 
