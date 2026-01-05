@@ -24,29 +24,38 @@ Predict the likelihood of 30-day hospital readmission using a Random Forest mode
 discharge data from 130 US hospitals. This model was developed using SMOTE to handle class imbalance.
 """)
 
-# Download model from Hugging Face on first run
+# Download model from Hugging Face
 @st.cache_resource
 def load_model():
     model_path = "models/hospital_readmission_model.pkl"
+    url = "https://huggingface.co/Uthy4r/hospital-readmission-model/resolve/main/hospital_readmission_model.pkl"
     
-    # Only download if not already cached locally
+    # Check if file exists and delete if corrupted (too small)
+    if os.path.exists(model_path):
+        if os.path.getsize(model_path) < 1000:
+            print("Detected corrupted model file. Deleting and re-downloading...")
+            os.remove(model_path)
+    
+    # Download if missing
     if not os.path.exists(model_path):
         os.makedirs("models", exist_ok=True)
-        print("Downloading model from Hugging Face...")
-        
-        url = "https://huggingface.co/Uthy4r/hospital_readmission_model/resolve/main/rf_readmission_smote.pkl"
-        response = requests.get(url)
-        
-        with open(model_path, "wb") as f:
-            f.write(response.content)
-        print("Model downloaded successfully!")
-    
+        print(f"Downloading model from {url}...")
+        try:
+            response = requests.get(url)
+            response.raise_for_status()
+            with open(model_path, "wb") as f:
+                f.write(response.content)
+            print("Model downloaded successfully!")
+        except requests.exceptions.RequestException as e:
+            st.error(f"❌ Download failed! Check URL. Error: {e}")
+            return None
+
     # Load the model
     try:
         model = joblib.load(model_path)
         return model
     except Exception as e:
-        st.error(f"Error loading model: {e}")
+        st.error(f"❌ Error loading model file. It might be corrupted. Error: {e}")
         return None
 
 model = load_model()
@@ -57,40 +66,44 @@ if model is None:
 # Sidebar for input
 st.sidebar.header("📋 Patient Information")
 
-# Input fields (map to training features)
+# Input fields (Map exactly to the features: age, time_in_hospital, num_lab_procedures, num_medications, number_outpatient, number_emergency, number_inpatient)
 col1, col2 = st.columns(2)
 
 with col1:
     age = st.slider("Age (years)", 0, 100, 50)
     time_in_hospital = st.slider("Time in Hospital (days)", 1, 14, 5)
     num_lab_procedures = st.slider("Number of Lab Procedures", 1, 150, 40)
+    num_medications = st.slider("Number of Medications", 1, 81, 15)
 
 with col2:
-    num_medications = st.slider("Number of Medications", 1, 81, 15)
-    num_outpatient_visits = st.number_input("Outpatient Visits (past year)", 0, 100, 2)
-    number_diagnoses = st.slider("Number of Diagnoses", 1, 16, 8)
+    # Renamed to match model expectation: number_outpatient
+    number_outpatient = st.number_input("Outpatient Visits (past year)", 0, 50, 0)
+    # Added missing feature: number_emergency
+    number_emergency = st.number_input("Emergency Visits (past year)", 0, 50, 0)
+    # Added missing feature: number_inpatient
+    number_inpatient = st.number_input("Inpatient Visits (past year)", 0, 50, 0)
 
 st.sidebar.markdown("---")
 
-# Create feature vector (must match training feature order)
+# Create feature vector with EXACT names required by the model
 input_data = pd.DataFrame({
     'age': [age],
     'time_in_hospital': [time_in_hospital],
     'num_lab_procedures': [num_lab_procedures],
     'num_medications': [num_medications],
-    'num_outpatient_visits': [num_outpatient_visits],
-    'number_diagnoses': [number_diagnoses]
+    'number_outpatient': [number_outpatient],
+    'number_emergency': [number_emergency],
+    'number_inpatient': [number_inpatient]
 })
 
 # Make prediction
 if st.sidebar.button("🔮 Predict Readmission Risk", use_container_width=True):
     try:
         prediction = model.predict(input_data)[0]
-        # Check if the model supports predict_proba, otherwise mock it or handle gracefully
+        
         if hasattr(model, "predict_proba"):
             probability = model.predict_proba(input_data)[0][1]
         else:
-            # Fallback if model doesn't support probability (though RF usually does)
             probability = 1.0 if prediction == 1 else 0.0
         
         # Display results
@@ -130,22 +143,10 @@ if st.sidebar.button("🔮 Predict Readmission Risk", use_container_width=True):
     except Exception as e:
         st.error(f"Prediction error: {e}")
 
-# Model info sidebar
-st.sidebar.markdown("---")
-st.sidebar.markdown("### 📚 Model Information")
-st.sidebar.markdown("""
-- **Algorithm**: Random Forest (200 trees)
-- **Balancing**: SMOTE (Synthetic Minority Oversampling)
-- **Target**: 30-day hospital readmission
-- **Data**: 130 US hospitals discharge records
-- **Evaluation**: Confusion matrix, classification report available in notebook
-""")
-
 # Footer
 st.markdown("---")
 st.markdown("""
 <div style="text-align: center; color: gray; font-size: 12px;">
     <p>Model trained on publicly available hospital discharge data. Use for educational/research purposes only.</p>
-    <p>For production deployment, validate against current clinical guidelines and institutional data.</p>
 </div>
 """, unsafe_allow_html=True)
