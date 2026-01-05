@@ -143,7 +143,7 @@ View detailed metrics in the notebook:
 ## 🌐 Deployment
 
 ### Live Demo
-**Streamlit Community Cloud:** [Click to Launch App]([https://hospital-readmission-prediction-hjdowydudqu2dvcyov9dvh.streamlit.app/])
+**Streamlit Community Cloud:** [Click to Launch App]([INSERT_YOUR_LINK_HERE](https://hospital-readmission-prediction-hjdowydudqu2dvcyov9dvh.streamlit.app/))
 
 ### Deployment Architecture
 This app is deployed using:
