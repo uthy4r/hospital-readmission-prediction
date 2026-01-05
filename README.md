@@ -175,7 +175,7 @@ See `requirements.txt`:
 - `pandas` — Data manipulation
 - `imbalanced-learn` — SMOTE balancing
 - `ucimlrepo` — Dataset fetching
-- - `requests` — Model downloading
+- `requests` — Model downloading
 
 ## 🛠️ Troubleshooting
 
