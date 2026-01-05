@@ -210,7 +210,7 @@ MIT License — Feel free to use for research/education
 
 ## 👤 Author
 
-**Your Name** | AI/ML Research  
+**Uthman Babatunde** | AI/ML Research  
 📧 [buthman98@gmail.com](mailto:buthman98@gmail.com)  
 🔗 [LinkedIn](https://linkedin.com/in/uthman-babatunde-m-d-126582286) | [GitHub](https://github.com/uthy4r)
 
