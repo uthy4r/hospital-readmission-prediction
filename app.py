@@ -7,6 +7,8 @@ import streamlit as st
 import pandas as pd
 import numpy as np
 import joblib
+import os
+import requests
 from pathlib import Path
 
 # Set page config
@@ -22,14 +24,30 @@ Predict the likelihood of 30-day hospital readmission using a Random Forest mode
 discharge data from 130 US hospitals. This model was developed using SMOTE to handle class imbalance.
 """)
 
-# Load model
+# Download model from Hugging Face on first run
 @st.cache_resource
 def load_model():
-    model_path = Path(__file__).parent / "models" / "rf_readmission_smote.pkl"
-    if not model_path.exists():
-        st.error(f"Model not found at {model_path}")
+    model_path = "models/hospital_readmission_model.pkl"
+    
+    # Only download if not already cached locally
+    if not os.path.exists(model_path):
+        os.makedirs("models", exist_ok=True)
+        print("Downloading model from Hugging Face...")
+        
+        url = "https://huggingface.co/Uthy4r/hospital-readmission-model/resolve/main/hospital_readmission_model.pkl"
+        response = requests.get(url)
+        
+        with open(model_path, "wb") as f:
+            f.write(response.content)
+        print("Model downloaded successfully!")
+    
+    # Load the model
+    try:
+        model = joblib.load(model_path)
+        return model
+    except Exception as e:
+        st.error(f"Error loading model: {e}")
         return None
-    return joblib.load(model_path)
 
 model = load_model()
 
@@ -68,7 +86,12 @@ input_data = pd.DataFrame({
 if st.sidebar.button("🔮 Predict Readmission Risk", use_container_width=True):
     try:
         prediction = model.predict(input_data)[0]
-        probability = model.predict_proba(input_data)[0][1]
+        # Check if the model supports predict_proba, otherwise mock it or handle gracefully
+        if hasattr(model, "predict_proba"):
+            probability = model.predict_proba(input_data)[0][1]
+        else:
+            # Fallback if model doesn't support probability (though RF usually does)
+            probability = 1.0 if prediction == 1 else 0.0
         
         # Display results
         st.subheader("📊 Prediction Results")
