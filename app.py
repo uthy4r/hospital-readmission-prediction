@@ -32,7 +32,7 @@ risk scores >30% are flagged as **High Risk**.
 def load_model():
     model_path = "models/hospital_readmission_model.pkl"
     # Use the 'resolve' URL to ensure binary download
-    url = "https://huggingface.co/Uthy4r/hospital-readmission-model/resolve/main/hospital_readmission_model.pkl"
+    url = "https://huggingface.co/Uthy4r/hospital_readmission_model/resolve/main/rf_readmission_smote.pkl"
     
     # Check if file exists and delete if corrupted (too small)
     if os.path.exists(model_path):
