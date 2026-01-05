@@ -34,7 +34,7 @@ def load_model():
         os.makedirs("models", exist_ok=True)
         print("Downloading model from Hugging Face...")
         
-        url = "https://huggingface.co/Uthy4r/hospital-readmission-model/resolve/main/hospital_readmission_model.pkl"
+        url = "https://huggingface.co/Uthy4r/hospital_readmission_model/resolve/main/rf_readmission_smote.pkl"
         response = requests.get(url)
         
         with open(model_path, "wb") as f:
