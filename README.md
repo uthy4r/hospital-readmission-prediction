@@ -1,44 +1,44 @@
-🏥 Hospital Readmission Risk Prediction
+# 🏥 Hospital Readmission Risk Prediction
 
 A machine learning model that predicts 30-day hospital readmission risk using patient discharge data from 130 US hospitals. This project combines Random Forest classification with SMOTE balancing to handle class imbalance in healthcare data.
 
-📊 Project Overview
+## 📊 Project Overview
 
-Problem: Hospital readmissions increase costs and indicate gaps in discharge planning. Early identification of high-risk patients enables targeted interventions.
+**Problem**: Hospital readmissions increase costs and indicate gaps in discharge planning. Early identification of high-risk patients enables targeted interventions.
 
-Solution: A predictive model that estimates readmission probability using clinically calibrated thresholds (Low/Moderate/High) to ensure high sensitivity for at-risk patients.
+**Solution**: A predictive model that estimates readmission probability based on:
+- Time in hospital
+- Number of medications & lab procedures
+- Patient diagnoses & outpatient visit history
+- Age and other demographic factors
 
-Results:
+**Results**:
+- **Balanced Accuracy**: 72% (after SMOTE)
+- **Precision (High-Risk)**: 89%
+- **Recall**: 27% (conservative: avoids over-flagging)
 
-Balanced Accuracy: 72% (after SMOTE)
+## 📁 Repository Structure
 
-Precision (High-Risk): 89%
-
-Recall: Optimized to avoid missing critical cases (false negatives)
-
-📸 Interface
-
-📁 Repository Structure
-
+```
 hospital-readmission/
 ├── notebooks/
 │   └── Readmission_model.ipynb          # Full ML pipeline & analysis
 ├── models/
-│   └── README.md                        # Model documentation (artifact hosted on Hugging Face)
+│   └── rf_readmission_smote.pkl         # Trained Random Forest (see note below)
 ├── app.py                               # Streamlit web interface
 ├── requirements.txt                     # Python dependencies
-├── MODEL_CARD.md                        # Detailed model documentation & ethics
-├── .gitignore                           # Git ignore rules
-└── README.md                            # This file
+├── .gitignore                          # Git ignore rules
+└── README.md                           # This file
+```
 
+## 🚀 Quick Start
 
-🚀 Quick Start
+### Local Setup (Development)
 
-Local Setup (Development)
-
+```bash
 # Clone repository
-git clone [https://github.com/uthy4r/Readmission-model.git](https://github.com/uthy4r/Readmission-model.git)
-cd Readmission-model
+git clone https://github.com/yourusername/hospital-readmission.git
+cd hospital-readmission
 
 # Create virtual environment
 python3 -m venv venv
@@ -49,41 +49,35 @@ pip install -r requirements.txt
 
 # Run Streamlit app
 streamlit run app.py
+```
 
+The app opens at `http://localhost:8501`
 
-The app opens at http://localhost:8501. Note: The app will automatically download the model from Hugging Face on the first run.
+### Run Notebook (Training)
 
-Run Notebook (Training)
-
+```bash
 jupyter notebook notebooks/Readmission_model.ipynb
-
+```
 
 This executes the full pipeline:
+1. Data loading from UCI ML Repository
+2. Exploratory data analysis (EDA)
+3. Feature engineering & preprocessing
+4. Model training (Logistic Regression baseline + Random Forest)
+5. SMOTE oversampling for class balance
+6. Model evaluation & feature importance
 
-Data loading from UCI ML Repository
+## 📦 Model File (Important)
 
-Exploratory data analysis (EDA)
+This repository does not include the trained model file (`rf_readmission_smote.pkl`) because it is large (~240MB).
 
-Feature engineering & preprocessing
+### To run the app locally:
+1. Ensure the trained model is placed at: `models/rf_readmission_smote.pkl`
+2. Run: `streamlit run app.py`
 
-Model training (Logistic Regression baseline + Random Forest)
+### To generate the model yourself:
 
-SMOTE oversampling for class balance
-
-Model evaluation & feature importance
-
-📦 Model File (Important)
-
-This repository uses a Hybrid Architecture to handle the large model file (~240MB) without bloating the Git repository.
-
-To run the app locally:
-
-Run streamlit run app.py
-
-The script will automatically fetch the model from Hugging Face and place it in the models/ folder.
-
-To generate the model yourself:
-
+```bash
 # Navigate to project folder
 cd hospital-readmission
 
@@ -97,182 +91,139 @@ jupyter notebook notebooks/Readmission_model.ipynb
 
 # Move the model to the correct folder
 move rf_readmission_smote.pkl models/
+```
 
+## 📝 Model Details
 
-📝 Model Details
+### Algorithms Used
 
-Algorithms Used
+| Model | Purpose | Result |
+|-------|---------|--------|
+| **Logistic Regression** | Baseline | 72% accuracy |
+| **Random Forest (200 trees)** | Primary | 72% accuracy, better feature insights |
+| **SMOTE** | Class balancing | Improved recall for minority class |
 
-Model
+### Key Features
 
-Purpose
+- `age`: Patient age at discharge
+- `time_in_hospital`: Number of days hospitalized
+- `num_lab_procedures`: Laboratory tests performed
+- `num_medications`: Count of discharge medications
+- `num_outpatient_visits`: Visits in past year
+- `number_diagnoses`: Total diagnoses recorded
 
-Result
+### Class Balance
 
-Logistic Regression
+- **Before SMOTE**: 90% non-readmitted, 10% readmitted
+- **After SMOTE**: 50/50 balanced
 
-Baseline
-
-72% accuracy
-
-Random Forest (200 trees)
-
-Primary
-
-72% accuracy, better feature insights
-
-SMOTE
-
-Class balancing
-
-Improved recall for minority class
-
-Key Features
-
-age: Patient age at discharge
-
-time_in_hospital: Number of days hospitalized
-
-num_lab_procedures: Laboratory tests performed
-
-num_medications: Count of discharge medications
-
-number_outpatient: Visits in past year
-
-number_emergency: Emergency visits in past year
-
-number_inpatient: Inpatient visits in past year
-
-Clinical Logic & Thresholds
-
-High Risk (> 30%): Patient has >3x the baseline risk. Action: Intensive intervention.
-
-Moderate Risk (15-30%): Patient has elevated risk. Action: Standard follow-up.
-
-Low Risk (< 15%): Risk is at or below baseline.
-
-🎯 Model Evaluation
+## 🎯 Model Evaluation
 
 View detailed metrics in the notebook:
+- Confusion matrices (Logistic Regression vs Random Forest)
+- Classification reports (precision, recall, F1-score)
+- Feature importance rankings
+- Probability distributions
 
-Confusion matrices (Logistic Regression vs Random Forest)
+## 🌐 Deployment
 
-Classification reports (precision, recall, F1-score)
+### Option 1: Streamlit Community Cloud (Free, No Code)
 
-Feature importance rankings
+1. Push code to GitHub
+2. Go to [share.streamlit.io](https://share.streamlit.io)
+3. Connect your GitHub repo → **Deploy**
+4. Share public URL
 
-Probability distributions
+### Option 2: Heroku / Railway / Render
 
-🌐 Deployment
+```bash
+# Add Procfile (Heroku)
+echo "web: streamlit run app.py --server.port \$PORT" > Procfile
 
-Option 1: Streamlit Community Cloud (Live)
+# Deploy
+git push heroku main
+```
 
-Live Demo: Click to Launch App
+### Option 3: Docker (Production)
 
-Architecture: Streamlit Frontend + Hugging Face Model Registry
-
-Option 2: Docker (Production)
-
-FROM python:3.9-slim
+```dockerfile
+FROM python:3.11-slim
 WORKDIR /app
 COPY requirements.txt .
 RUN pip install -r requirements.txt
 COPY . .
 EXPOSE 8501
 CMD ["streamlit", "run", "app.py"]
+```
 
+## 📚 Data Source
 
-📚 Data Source
+**UCI ML Repository**: [130 US Hospitals for Diabetes](https://archive.ics.uci.edu/dataset/296/diabetes+130-us+hospitals+for+years+1999-2008)
 
-UCI ML Repository: 130 US Hospitals for Diabetes
+- **Records**: ~101k hospital stays
+- **Features**: 55 clinical variables
+- **Target**: Readmitted within 30 days (binary)
 
-Records: ~101k hospital stays
+## 🔐 Security Notes
 
-Features: 55 clinical variables
+- ✅ **No hardcoded secrets** (all auth tokens, API keys removed)
+- ✅ **Large files ignored** (models via `.gitignore`)
+- ✅ **Data privacy**: No patient identifiers in repo
+- ⚠️ **Model for research only**: Not validated for clinical use
 
-Target: Readmitted within 30 days (binary)
+## 📦 Requirements
 
-🔐 Security Notes
+See `requirements.txt`:
+- `streamlit` — Web interface
+- `scikit-learn` — ML models & evaluation
+- `pandas` — Data manipulation
+- `imbalanced-learn` — SMOTE balancing
+- `ucimlrepo` — Dataset fetching
 
-✅ No hardcoded secrets (all auth tokens, API keys removed)
+## 🛠️ Troubleshooting
 
-✅ Large files ignored (models via .gitignore)
+**"Model not found" error**
+- Ensure `models/rf_readmission_smote.pkl` exists in repo
+- Run notebook to regenerate model
 
-✅ Data privacy: No patient identifiers in repo
-
-⚠️ Model for research only: Not validated for clinical use
-
-📦 Requirements
-
-See requirements.txt:
-
-streamlit — Web interface
-
-scikit-learn — ML models & evaluation
-
-pandas — Data manipulation
-
-imbalanced-learn — SMOTE balancing
-
-ucimlrepo — Dataset fetching
-
-requests — Model downloading
-
-🛠️ Troubleshooting
-
-"Model not found" error
-
-Ensure internet connection for auto-download
-
-Or manually download from Hugging Face and place in models/
-
-Port 8501 already in use
-
+**Port 8501 already in use**
+```bash
 streamlit run app.py --server.port 8502
+```
 
-
-Import errors
-
+**Import errors**
+```bash
 pip install --upgrade pip
 pip install -r requirements.txt --force-reinstall
+```
 
+## 📊 Next Steps & Improvements
 
-📊 Next Steps & Improvements
+- [ ] Cross-validation with k-folds
+- [ ] Hyperparameter tuning (GridSearchCV)
+- [ ] Feature selection (RFE, SelectKBest)
+- [ ] Production monitoring & model drift detection
+- [ ] User authentication for Streamlit app
+- [ ] Integration with hospital EHR systems
+- [ ] Calibration for clinical decision thresholds
 
-[ ] Cross-validation with k-folds
-
-[ ] Hyperparameter tuning (GridSearchCV)
-
-[ ] Feature selection (RFE, SelectKBest)
-
-[ ] Production monitoring & model drift detection
-
-[ ] User authentication for Streamlit app
-
-[ ] Integration with hospital EHR systems
-
-[ ] Calibration for clinical decision thresholds
-
-📄 License
+## 📄 License
 
 MIT License — Feel free to use for research/education
 
-👤 Author
+## 👤 Author
 
-Dr. Uthman Babatunde | Medical Doctor & Applied AI Engineer
+**Your Name** | AI/ML Research  
+📧 [your.email@example.com](mailto:your.email@example.com)  
+🔗 [LinkedIn](https://linkedin.com/in/yourprofile) | [GitHub](https://github.com/yourusername)
 
-📧 buthman@gmail.com
+## 📖 References
 
-🔗 LinkedIn | GitHub
+1. Strack, B., et al. (2014). "Impact of HbA1c Measurement on Hospital Readmission Rates" *BioMed Research International*
+2. Scikit-learn Documentation: [SMOTE](https://imbalanced-learn.org/stable/references/generated/imblearn.over_sampling.SMOTE.html)
+3. UCI ML Repository Diabetes Dataset
 
-📖 References
+---
 
-Strack, B., et al. (2014). "Impact of HbA1c Measurement on Hospital Readmission Rates" BioMed Research International
-
-Scikit-learn Documentation: SMOTE
-
-UCI ML Repository Diabetes Dataset
-
-Last Updated: January 2026
-
-Model Version: 1.0 (Random Forest + SMOTE)
+**Last Updated**: January 2026  
+**Model Version**: 1.0 (Random Forest + SMOTE)
